@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { handleChangeName, handleChangeNumber } from "../redux/actions";
+import { formSubmitHendler } from "../redux/actions";
 
 
-function ContactForm ({onSubmit, changeNumber, changeName}) {
+function ContactForm ({onSubmit, contactsItems}) {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
 
@@ -18,6 +18,10 @@ function ContactForm ({onSubmit, changeNumber, changeName}) {
 
     const handleSubmit = event => {
         event.preventDefault();
+        if (contactsItems.find(cont => cont.name === name)) {
+        alert(`${name} is already in contacts`);
+         return
+         };
         onSubmit({ name, number });
         reset();
     };
@@ -32,7 +36,7 @@ function ContactForm ({onSubmit, changeNumber, changeName}) {
               Name <input
                 type="text"
                 value={name}
-                onChange={changeName}
+                onChange={handleChangeName}
                 name="name"
                 className="inputStyles" />
         </label>
@@ -40,7 +44,7 @@ function ContactForm ({onSubmit, changeNumber, changeName}) {
               Number <input
                 type="tel"
                 value={number}
-                onChange={changeNumber}
+                onChange={handleChangeNumber}
                 name="number"
                 className="inputStyles" />
         </label>
@@ -52,17 +56,13 @@ ContactForm.propTypes = {
     onSubmit: PropTypes.func.isRequired, 
 }
 
-const mapStateToProps = state => {
-    return {
-        name: state.name,
-        number: state.number
-    }
-}
+const mapStateToProps = state => ({
+    contactsItems: state.contacts.items,
+})
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeNumber: () => dispatch(handleChangeNumber()),
-        changeName: () => dispatch(handleChangeName())
+        onSubmit: ({ name, number }) => dispatch(formSubmitHendler({ name, number }))
     }
 }
 

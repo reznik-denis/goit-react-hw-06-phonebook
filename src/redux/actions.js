@@ -1,15 +1,20 @@
-export const myAction = {
-    type: '',
-    payload: 'super'
-}
+import shortid from 'shortid';
 
-export const handleChangeName = event => ({
-    type: 'contact/Name',
-    payload: event
+export const deleteContact = (id) => ({
+    type: 'contact/Delete',
+    payload: id,
+})
+    
+export const chengeFilter = value => ({
+    type: 'contact/ChengeFilter',
+    payload: value
 });
 
-export const handleChangeNumber = event => ({
-    type: 'contact/Number',
-    payload: event
-});
-
+export const formSubmitHendler = ({ name, number }) => ({
+    type: 'contact/FormSubmitHendler',
+    payload: {
+        id: shortid.generate(),
+        name,
+        number
+    }
+})

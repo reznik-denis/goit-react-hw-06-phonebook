@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { chengeFilter } from "../redux/actions";
 
 function Filter({value, onChange}) {
     return (<label className="labelBlock">
@@ -12,4 +14,14 @@ Filter.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
-export default Filter;
+const mapStateToProps = state => ({
+    value: state.contacts.filter,
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onChange: (e) => dispatch(chengeFilter(e.currentTarget.value)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

@@ -1,22 +1,35 @@
-import { createStore } from "redux";
+import { createStore, combineReducers } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-const stateTo = {
-    name: '',
-    number: ''
-};
-
-
-const reducer = (state = stateTo, {type, payload}) => {
+const itemsRedusser = (state = [], { type, payload }) => {
     switch (type) {
-        case 'contact/Name':
-            return { name: payload.currentTarget.value };
-        case 'contact/Number':
-            return { number: payload.currentTarget.value };
+        case 'contact/FormSubmitHendler':
+            return [...state, payload];
+        case 'contact/Delete':
+            return state.filter(contact => contact.id !== payload);
         default:
-            return state;
+            return state
+    }
+}
+
+const filterReduser = (state = '', { type, payload }) => {
+    switch (type) {
+        case 'contact/ChengeFilter':
+            return payload;
+        default:
+            return state
     }
 };
 
-const store = createStore(reducer);
+const contactsReduser = combineReducers({
+    items: itemsRedusser,
+    filter: filterReduser
+});
+
+const rootReduser = combineReducers({
+    contacts: contactsReduser
+});
+
+const store = createStore(rootReduser, composeWithDevTools());
 
 export default store;
