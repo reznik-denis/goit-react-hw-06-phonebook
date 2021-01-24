@@ -1,9 +1,10 @@
 import React from 'react';
 import ButtonDelete from './ButtonDelete';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+// import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-function ContactList({contacts}) {
+function ContactList() {
+    const contacts = useSelector(({ contacts: { items, filter } }) => getVisibleContacts(items, filter))
     return (<ul className="list">
             {contacts.map(({id, name, number}) => (
               <li key={id} className="listItem">{name}: {number}
@@ -11,23 +12,17 @@ function ContactList({contacts}) {
               </li>
               ))}
           </ul>)
-}
-
-ContactList.propTypes = {
-    contacts: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
-    }))
-}
+};
 
 const getVisibleContacts = (allContacts, filter) => {
     const normalizedFilter = filter.toLowerCase();
     return allContacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter));
 }
 
-const mapStateToProps = ({ contacts: { items, filter } }) => ({
-    contacts: getVisibleContacts(items, filter),
-});
+export default ContactList;
 
-export default connect(mapStateToProps)(ContactList);
+// export default connect(mapStateToProps)(ContactList);
+
+// const mapStateToProps = ({ contacts: { items, filter } }) => ({
+//     contacts: getVisibleContacts(items, filter),
+// });

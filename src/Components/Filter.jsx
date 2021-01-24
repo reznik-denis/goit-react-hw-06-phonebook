@@ -1,27 +1,27 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { chengeFilter } from "../redux/actions";
 
-function Filter({value, onChange}) {
+function Filter() {
+    const value = useSelector(state => state.contacts.filter);
+    const dispatch = useDispatch();
+
     return (<label className="labelBlock">
-        Find contacts by name <input type="text" value={value} onChange={onChange} className="inputStyles"/>
+        Find contacts by name <input type="text" value={value} onChange={(e) => dispatch(chengeFilter(e.currentTarget.value))} className="inputStyles"/>
         </label>)
 };
 
-Filter.propTypes = {
-    value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-};
+export default Filter;
 
-const mapStateToProps = state => ({
-    value: state.contacts.filter,
-})
+// export default connect(mapStateToProps, mapDispatchToProps)(Filter);
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onChange: (e) => dispatch(chengeFilter(e.currentTarget.value)),
-    }
-}
+// const mapStateToProps = state => ({
+//     value: state.contacts.filter,
+// })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         onChange: (e) => dispatch(chengeFilter(e.currentTarget.value)),
+//     }
+// }

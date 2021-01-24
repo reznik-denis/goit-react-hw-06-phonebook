@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { formSubmitHendler } from "../redux/actions";
 
 
-function ContactForm ({onSubmit, contactsItems}) {
+function ContactForm () {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
+    const contactsItems = useSelector(state => state.contacts.items);
+    const disratch = useDispatch();
 
     const handleChangeName = event => {
         setName(event.currentTarget.value);
@@ -19,10 +21,10 @@ function ContactForm ({onSubmit, contactsItems}) {
     const handleSubmit = event => {
         event.preventDefault();
         if (contactsItems.find(cont => cont.name === name)) {
-        alert(`${name} is already in contacts`);
+            alert(`${name} is already in contacts`);
          return
          };
-        onSubmit({ name, number });
+        disratch(formSubmitHendler({ name, number }));
         reset();
     };
 
@@ -52,18 +54,14 @@ function ContactForm ({onSubmit, contactsItems}) {
       </form> )
 }
 
-ContactForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired, 
-}
+export default ContactForm;
 
-const mapStateToProps = state => ({
-    contactsItems: state.contacts.items,
-})
+// const mapStateToProps = state => ({
+//     contactsItems: state.contacts.items,
+// });
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onSubmit: ({ name, number }) => dispatch(formSubmitHendler({ name, number }))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         onSubmit: ({ name, number }) => dispatch(formSubmitHendler({ name, number }))
+//     }
+// };
